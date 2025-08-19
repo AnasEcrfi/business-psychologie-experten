@@ -5,8 +5,13 @@ export function middleware(request: NextRequest) {
   // Check if coming soon mode is enabled
   const COMING_SOON_MODE = true // Set to false to disable coming soon
   
-  // Allow access to coming-soon page itself
-  if (request.nextUrl.pathname === '/coming-soon') {
+  // Allow access to coming-soon page itself and legal pages
+  if (
+    request.nextUrl.pathname === '/coming-soon' ||
+    request.nextUrl.pathname === '/datenschutz' ||
+    request.nextUrl.pathname === '/agb' ||
+    request.nextUrl.pathname === '/impressum'
+  ) {
     return NextResponse.next()
   }
   
