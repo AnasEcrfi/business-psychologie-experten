@@ -15,6 +15,16 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
   
+  // Allow access to admin routes (they have their own authentication)
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    return NextResponse.next()
+  }
+  
+  // Allow access to auth routes
+  if (request.nextUrl.pathname.startsWith('/auth')) {
+    return NextResponse.next()
+  }
+  
   // Allow access to static files and API routes
   if (
     request.nextUrl.pathname.startsWith('/_next') ||

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { signOut, getCurrentUser } from "@/lib/auth"
+import { signOut, getCurrentUser } from "@/lib/auth-migration"
 import Link from "next/link"
 import { 
   LayoutDashboard, 
@@ -23,18 +23,21 @@ export default function AdminLayout({
   const router = useRouter()
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
-  const [user, setUser] = React.useState<ReturnType<typeof getCurrentUser>>(null)
+  const [user, setUser] = React.useState<any>(null)
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
     setMounted(true)
     // Check authentication on client side only
-    const currentUser = getCurrentUser()
-    setUser(currentUser)
-    
-    if (!currentUser && pathname !== "/admin/login") {
-      router.push("/admin/login")
+    const checkAuth = async () => {
+      const currentUser = await getCurrentUser()
+      setUser(currentUser)
+      
+      if (!currentUser && pathname !== "/admin/login") {
+        router.push("/admin/login")
+      }
     }
+    checkAuth()
   }, [pathname, router])
   
   // Prevent hydration mismatch
@@ -47,8 +50,8 @@ export default function AdminLayout({
     return <>{children}</>
   }
 
-  const handleSignOut = () => {
-    signOut()
+  const handleSignOut = async () => {
+    await signOut()
     router.push("/admin/login")
   }
 
