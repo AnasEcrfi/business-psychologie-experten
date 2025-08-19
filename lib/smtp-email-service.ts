@@ -36,17 +36,20 @@ export async function sendBookingNotification(data: BookingNotificationData) {
   try {
     const transporter = createTransporter()
     
-    // Format date for display - parse as local date to avoid timezone issues
-    // data.date comes as YYYY-MM-DD string
+    // Format date for display - data.date comes as YYYY-MM-DD string
     const [year, month, day] = data.date.split('-').map(Number)
-    const dateObj = new Date(year, month - 1, day) // month is 0-indexed in JS
-    const formattedDate = dateObj.toLocaleDateString('de-DE', { 
-      weekday: 'long', 
-      day: 'numeric', 
-      month: 'long', 
-      year: 'numeric',
-      timeZone: 'Europe/Berlin' // Ensure German timezone
-    })
+    
+    // German month and weekday names
+    const monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 
+                       'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
+    const weekdayNames = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']
+    
+    // Create date object with local values (no timezone conversion)
+    const dateObj = new Date(year, month - 1, day)
+    const weekday = weekdayNames[dateObj.getDay()]
+    const monthName = monthNames[month - 1]
+    
+    const formattedDate = `${weekday}, ${day}. ${monthName} ${year}`
     
     const mailOptions = {
       from: `"Business Psychologie Experten" <${process.env.SMTP_USER}>`,

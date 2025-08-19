@@ -97,7 +97,11 @@ export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
   // Load slots for selected date
   React.useEffect(() => {
     if (selectedDate) {
-      const dateStr = selectedDate.toISOString().split('T')[0]
+      // Format date as YYYY-MM-DD without timezone conversion
+      const year = selectedDate.getFullYear()
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0')
+      const day = String(selectedDate.getDate()).padStart(2, '0')
+      const dateStr = `${year}-${month}-${day}`
       const slots = monthSlots.get(dateStr) || []
       setAvailableSlots(slots.sort((a, b) => a.time.localeCompare(b.time)))
     }
@@ -120,7 +124,11 @@ export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
     setLoading(true)
     
     try {
-      const dateStr = selectedDate.toISOString().split('T')[0]
+      // Format date as YYYY-MM-DD without timezone conversion
+      const year = selectedDate.getFullYear()
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0')
+      const day = String(selectedDate.getDate()).padStart(2, '0')
+      const dateStr = `${year}-${month}-${day}`
       await addBooking({
         date: dateStr,
         time: selectedTime,
