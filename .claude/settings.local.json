@@ -28,7 +28,8 @@
       "Bash(node:*)",
       "Bash(curl:*)",
       "Bash(npm install:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(true)"
     ],
     "deny": [],
     "ask": []

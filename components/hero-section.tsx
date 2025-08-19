@@ -27,7 +27,7 @@ export function HeroSection() {
         
         {/* Video element with iOS compatibility */}
         <IOSVideoBackground 
-          src="/assets/video/videos/Business_Psychologie_Experten_compressed.mp4"
+          src="/assets/video/videos/Business_Psychologie_Experten-2.mp4"
         />
         
         {/* Video Overlay for better text readability - softer overlay */}
