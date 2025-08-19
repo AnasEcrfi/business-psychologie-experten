@@ -41,30 +41,31 @@ export function FixedTimeSlots({ onSlotsChange }: FixedTimeSlotsProps) {
     onSlotsChange?.(updatedSlots)
   }
 
-  const handleSlotChange = (index: number, field: keyof FixedTimeSlot, value: any) => {
+  const handleSlotChange = (index: number, field: keyof FixedTimeSlot, value: string | number | boolean) => {
     const updatedSlots = [...slots]
     updatedSlots[index] = { ...updatedSlots[index], [field]: value }
     setSlots(updatedSlots)
     onSlotsChange?.(updatedSlots)
   }
 
-  const generateTimeSlotsForDate = (date: Date): string[] => {
-    const dayOfWeek = date.getDay()
-    const activeSlots = slots.filter(slot => slot.enabled && slot.dayOfWeek === dayOfWeek)
-    
-    const times: string[] = []
-    activeSlots.forEach(slot => {
-      const start = parseInt(slot.startTime.split(':')[0])
-      const end = parseInt(slot.endTime.split(':')[0])
-      
-      for (let hour = start; hour < end; hour++) {
-        times.push(`${hour.toString().padStart(2, '0')}:00`)
-        times.push(`${hour.toString().padStart(2, '0')}:30`)
-      }
-    })
-    
-    return times
-  }
+  // This function can be exported and used in the calendar component
+  // const generateTimeSlotsForDate = (date: Date): string[] => {
+  //   const dayOfWeek = date.getDay()
+  //   const activeSlots = slots.filter(slot => slot.enabled && slot.dayOfWeek === dayOfWeek)
+  //   
+  //   const times: string[] = []
+  //   activeSlots.forEach(slot => {
+  //     const start = parseInt(slot.startTime.split(':')[0])
+  //     const end = parseInt(slot.endTime.split(':')[0])
+  //     
+  //     for (let hour = start; hour < end; hour++) {
+  //       times.push(`${hour.toString().padStart(2, '0')}:00`)
+  //       times.push(`${hour.toString().padStart(2, '0')}:30`)
+  //     }
+  //   })
+  //   
+  //   return times
+  // }
 
   return (
     <div className="space-y-4">

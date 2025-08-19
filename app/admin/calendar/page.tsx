@@ -35,7 +35,7 @@ export default function AdminCalendar() {
   const [bookings, setBookings] = React.useState<Booking[]>([])
   const [showAddModal, setShowAddModal] = React.useState(false)
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null)
-  const [showSettings, setShowSettings] = React.useState(false)
+  const [showSettings, setShowSettings] = React.useState<boolean>(false)
   const [mounted, setMounted] = React.useState(false)
 
   const loadData = React.useCallback(async () => {
@@ -363,6 +363,30 @@ export default function AdminCalendar() {
           onClose={() => setSelectedBooking(null)}
         />
       )}
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold">Zeitfenster Einstellungen</h2>
+              <button
+                onClick={() => setShowSettings(false)}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <FixedTimeSlots 
+              onSlotsChange={(slots) => {
+                // Here you can save the slots configuration
+                console.log('Fixed time slots updated:', slots)
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -559,30 +583,7 @@ function BookingDetailModal({
           </button>
         </div>
       </div>
-
-      {/* Settings Modal */}
-      {showSettings && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold">Zeitfenster Einstellungen</h2>
-              <button
-                onClick={() => setShowSettings(false)}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            
-            <FixedTimeSlots 
-              onSlotsChange={(slots) => {
-                // Here you can save the slots configuration
-                console.log('Fixed time slots updated:', slots)
-              }}
-            />
-          </div>
-        </div>
-      )}
     </div>
   )
 }
+
