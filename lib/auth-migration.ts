@@ -1,6 +1,6 @@
 // Auth migration to use either local or Supabase authentication
 import * as localAuth from './auth'
-import * as supabaseStore from './store-migration'
+import * as supabaseAuth from './supabase-auth'
 
 const USE_SUPABASE = process.env.NEXT_PUBLIC_USE_SUPABASE === 'true'
 
@@ -13,51 +13,34 @@ export interface User {
 
 export async function signIn(email: string, password: string): Promise<User | null> {
   if (USE_SUPABASE) {
-    const user = await supabaseStore.signIn(email, password)
-    if (user) {
-      return {
-        id: user.id,
-        email: user.email,
-        name: 'Admin',
-        role: 'admin'
-      }
-    }
-    return null
+    return supabaseAuth.signIn(email, password)
   } else {
     return localAuth.signIn(email, password)
   }
 }
 
-export function signOut() {
+export async function signOut() {
   if (USE_SUPABASE) {
-    return supabaseStore.signOut()
+    return supabaseAuth.signOut()
   } else {
     return localAuth.signOut()
   }
 }
 
-export function getCurrentUser(): User | null {
+export async function getCurrentUser(): Promise<User | null> {
   if (USE_SUPABASE) {
-    const user = supabaseStore.getCurrentUser()
-    if (user) {
-      return {
-        id: user.id,
-        email: user.email,
-        name: 'Admin',
-        role: 'admin'
-      }
-    }
-    return null
+    return supabaseAuth.getCurrentUser()
   } else {
     return localAuth.getCurrentUser()
   }
 }
 
-export function isAuthenticated(): boolean {
-  return getCurrentUser() !== null
+export async function isAuthenticated(): Promise<boolean> {
+  const user = await getCurrentUser()
+  return user !== null
 }
 
-export function isAdmin(): boolean {
-  const user = getCurrentUser()
+export async function isAdmin(): Promise<boolean> {
+  const user = await getCurrentUser()
   return user?.role === 'admin'
 }

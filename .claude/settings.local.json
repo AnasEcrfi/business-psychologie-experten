@@ -20,7 +20,10 @@
       "Bash(git rm:*)",
       "Bash(git push:*)",
       "Bash(git init:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)"
     ],
     "deny": [],
     "ask": []
