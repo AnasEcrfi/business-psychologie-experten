@@ -4,7 +4,7 @@ import * as React from "react"
 import { Mail, Phone, MapPin, Send, CheckCircle, Calendar } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
-import { addContactSubmission } from "@/lib/store-with-notifications"
+import { addContactSubmission } from "@/lib/store-with-notifications-client"
 import { BookingModalV2 } from "./booking-modal-v2"
 
 export function ContactSection() {

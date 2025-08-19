@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
-import { getTimeSlots, addBooking, TimeSlot } from "@/lib/store-with-notifications"
+import { getTimeSlots, addBooking, TimeSlot } from "@/lib/store-with-notifications-client"
 
 interface BookingModalProps {
   isOpen: boolean
