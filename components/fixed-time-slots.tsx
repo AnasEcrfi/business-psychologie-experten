@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Clock, Plus, X } from "lucide-react"
 
-interface FixedTimeSlot {
+export interface FixedTimeSlot {
   dayOfWeek: number // 0-6 (Sunday-Saturday)
   startTime: string
   endTime: string
@@ -11,15 +11,18 @@ interface FixedTimeSlot {
 }
 
 interface FixedTimeSlotsProps {
+  initialSlots?: FixedTimeSlot[]
   onSlotsChange?: (slots: FixedTimeSlot[]) => void
 }
 
-export function FixedTimeSlots({ onSlotsChange }: FixedTimeSlotsProps) {
+export function FixedTimeSlots({ initialSlots, onSlotsChange }: FixedTimeSlotsProps) {
   // Default slots: Monday 13-15, Tuesday 11-13
-  const [slots, setSlots] = React.useState<FixedTimeSlot[]>([
-    { dayOfWeek: 1, startTime: "13:00", endTime: "15:00", enabled: true },
-    { dayOfWeek: 2, startTime: "11:00", endTime: "13:00", enabled: true },
-  ])
+  const [slots, setSlots] = React.useState<FixedTimeSlot[]>(
+    initialSlots || [
+      { dayOfWeek: 1, startTime: "13:00", endTime: "15:00", enabled: true },
+      { dayOfWeek: 2, startTime: "11:00", endTime: "13:00", enabled: true },
+    ]
+  )
 
   const weekDays = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"]
 

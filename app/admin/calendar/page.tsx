@@ -13,7 +13,7 @@ import {
   Phone,
   Settings
 } from "lucide-react"
-import { FixedTimeSlots } from "@/components/fixed-time-slots"
+import { FixedTimeSlots, type FixedTimeSlot } from "@/components/fixed-time-slots"
 import { 
   getTimeSlots, 
   addTimeSlots, 
@@ -36,6 +36,10 @@ export default function AdminCalendar() {
   const [showAddModal, setShowAddModal] = React.useState(false)
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null)
   const [showSettings, setShowSettings] = React.useState<boolean>(false)
+  const [fixedSlots, setFixedSlots] = React.useState<FixedTimeSlot[]>([
+    { dayOfWeek: 1, startTime: "13:00", endTime: "15:00", enabled: true },
+    { dayOfWeek: 2, startTime: "11:00", endTime: "13:00", enabled: true },
+  ])
   const [mounted, setMounted] = React.useState(false)
 
   const loadData = React.useCallback(async () => {
@@ -102,6 +106,36 @@ export default function AdminCalendar() {
 
   const handleDateClick = (date: Date) => {
     setSelectedDate(date)
+    // Auto-generate slots for this date if none exist
+    const dateStr = date.toISOString().split('T')[0]
+    const existingSlots = timeSlots.filter(slot => slot.date === dateStr)
+    
+    if (existingSlots.length === 0) {
+      // Check if this date matches any fixed slot day
+      const dayOfWeek = date.getDay()
+      const matchingFixedSlots = fixedSlots.filter(slot => 
+        slot.enabled && slot.dayOfWeek === dayOfWeek
+      )
+      
+      if (matchingFixedSlots.length > 0) {
+        // Generate time slots based on fixed configuration
+        const newSlots: string[] = []
+        matchingFixedSlots.forEach(fixedSlot => {
+          const startHour = parseInt(fixedSlot.startTime.split(':')[0])
+          const endHour = parseInt(fixedSlot.endTime.split(':')[0])
+          
+          for (let hour = startHour; hour < endHour; hour++) {
+            newSlots.push(`${hour.toString().padStart(2, '0')}:00`)
+            newSlots.push(`${hour.toString().padStart(2, '0')}:30`)
+          }
+        })
+        
+        // Automatically add these slots
+        if (newSlots.length > 0) {
+          handleAddTimeSlots(date, newSlots)
+        }
+      }
+    }
   }
 
   const handleAddTimeSlots = async (date: Date, times: string[]) => {
@@ -215,6 +249,12 @@ export default function AdminCalendar() {
               const isToday = today.toDateString() === date.toDateString()
               const isPast = date < today
               
+              // Check if this day has fixed time slots
+              const dayOfWeek = date.getDay()
+              const hasFixedSlots = fixedSlots.some(slot => 
+                slot.enabled && slot.dayOfWeek === dayOfWeek
+              )
+              
               return (
                 <button
                   key={index}
@@ -232,6 +272,9 @@ export default function AdminCalendar() {
                   
                   {/* Indicators */}
                   <div className="flex gap-1 mt-1 justify-center">
+                    {hasFixedSlots && slots.length === 0 && (
+                      <div className="w-1.5 h-1.5 rounded-full bg-yellow-500" />
+                    )}
                     {slots.length > 0 && (
                       <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
                     )}
@@ -245,14 +288,18 @@ export default function AdminCalendar() {
           </div>
 
           {/* Legend */}
-          <div className="flex gap-4 mt-6 text-xs">
+          <div className="flex gap-4 mt-6 text-xs flex-wrap">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-yellow-500" />
+              <span className="text-muted-foreground">Feste Zeitfenster</span>
+            </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-muted-foreground">Available Slots</span>
+              <span className="text-muted-foreground">Verfügbare Slots</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-muted-foreground">Bookings</span>
+              <span className="text-muted-foreground">Buchungen</span>
             </div>
           </div>
         </div>
@@ -379,8 +426,9 @@ export default function AdminCalendar() {
             </div>
             
             <FixedTimeSlots 
+              initialSlots={fixedSlots}
               onSlotsChange={(slots) => {
-                // Here you can save the slots configuration
+                setFixedSlots(slots)
                 console.log('Fixed time slots updated:', slots)
               }}
             />
