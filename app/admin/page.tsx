@@ -10,7 +10,7 @@ import {
   CheckCircle,
   AlertCircle
 } from "lucide-react"
-import { getContactSubmissions, getBookings } from "@/lib/store"
+import { getContactSubmissions, getBookings } from "@/lib/store-migration"
 import Link from "next/link"
 
 export default function AdminDashboard() {
@@ -27,29 +27,34 @@ export default function AdminDashboard() {
   React.useEffect(() => {
     setMounted(true)
     // Load stats on client side only
-    const messages = getContactSubmissions()
-    const bookings = getBookings()
-    
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    
-    const weekFromNow = new Date()
-    weekFromNow.setDate(weekFromNow.getDate() + 7)
-    
-    setStats({
-      totalMessages: messages.length,
-      unreadMessages: messages.filter(m => m.status === 'new').length,
-      totalBookings: bookings.length,
-      pendingBookings: bookings.filter(b => b.status === 'pending').length,
-      todayBookings: bookings.filter(b => {
-        const bookingDate = new Date(b.date)
-        return bookingDate.toDateString() === today.toDateString()
-      }).length,
-      weekBookings: bookings.filter(b => {
-        const bookingDate = new Date(b.date)
-        return bookingDate >= today && bookingDate <= weekFromNow
-      }).length
-    })
+    const loadStats = async () => {
+      const messages = await getContactSubmissions()
+      const bookings = await getBookings()
+      
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      
+      const weekFromNow = new Date()
+      weekFromNow.setDate(weekFromNow.getDate() + 7)
+      
+      if (Array.isArray(messages) && Array.isArray(bookings)) {
+        setStats({
+          totalMessages: messages.length,
+          unreadMessages: messages.filter(m => m.status === 'new').length,
+          totalBookings: bookings.length,
+          pendingBookings: bookings.filter(b => b.status === 'pending').length,
+          todayBookings: bookings.filter(b => {
+            const bookingDate = new Date(b.date)
+            return bookingDate.toDateString() === today.toDateString()
+          }).length,
+          weekBookings: bookings.filter(b => {
+            const bookingDate = new Date(b.date)
+            return bookingDate >= today && bookingDate <= weekFromNow
+          }).length
+        })
+      }
+    }
+    loadStats()
   }, [])
 
   const statCards = [

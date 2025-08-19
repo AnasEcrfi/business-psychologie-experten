@@ -9,7 +9,7 @@ import {
   Reply,
   Search
 } from "lucide-react"
-import { getContactSubmissions, updateContactStatus, ContactSubmission } from "@/lib/store"
+import { getContactSubmissions, updateContactStatus, ContactSubmission } from "@/lib/store-migration"
 import { cn } from "@/lib/utils"
 
 export default function AdminMessages() {
@@ -18,15 +18,17 @@ export default function AdminMessages() {
   const [searchTerm, setSearchTerm] = React.useState("")
   const [filter, setFilter] = React.useState<'all' | 'new' | 'read' | 'replied'>('all')
 
-  const loadMessages = React.useCallback(() => {
-    const allMessages = getContactSubmissions()
-    // Sort by date, newest first
-    allMessages.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    setMessages(allMessages)
-    
-    // Select first message if none selected
-    if (!selectedMessage && allMessages.length > 0) {
-      setSelectedMessage(allMessages[0])
+  const loadMessages = React.useCallback(async () => {
+    const allMessages = await getContactSubmissions()
+    if (Array.isArray(allMessages)) {
+      // Sort by date, newest first
+      allMessages.sort((a, b) => new Date(b.created_at || b.createdAt).getTime() - new Date(a.created_at || a.createdAt).getTime())
+      setMessages(allMessages)
+      
+      // Select first message if none selected
+      if (!selectedMessage && allMessages.length > 0) {
+        setSelectedMessage(allMessages[0])
+      }
     }
   }, [])
 
@@ -34,9 +36,9 @@ export default function AdminMessages() {
     loadMessages()
   }, [loadMessages])
 
-  const handleStatusChange = (id: string, status: ContactSubmission['status']) => {
-    updateContactStatus(id, status)
-    loadMessages()
+  const handleStatusChange = async (id: string, status: ContactSubmission['status']) => {
+    await updateContactStatus(id, status)
+    await loadMessages()
     
     // Update selected message if it's the one being changed
     if (selectedMessage?.id === id) {

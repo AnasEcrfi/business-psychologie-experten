@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { signIn } from "@/lib/auth"
+import { signIn } from "@/lib/auth-migration"
 import { Lock, Mail, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 

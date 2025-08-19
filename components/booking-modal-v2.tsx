@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
-import { getTimeSlots, addBooking, TimeSlot } from "@/lib/store"
+import { getTimeSlots, addBooking, TimeSlot } from "@/lib/store-migration"
 
 interface BookingModalProps {
   isOpen: boolean
@@ -48,21 +48,23 @@ export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
     return `${year}-${month}-${day}`
   }
 
-  const loadMonthSlots = React.useCallback(() => {
+  const loadMonthSlots = React.useCallback(async () => {
     const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1)
     const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
     
-    const slots = getTimeSlots(startOfMonth, endOfMonth)
+    const slots = await getTimeSlots(startOfMonth, endOfMonth)
     
     // Group slots by date
     const slotMap = new Map<string, TimeSlot[]>()
-    slots.forEach(slot => {
-      const dateKey = slot.date
-      if (!slotMap.has(dateKey)) {
-        slotMap.set(dateKey, [])
-      }
-      slotMap.get(dateKey)?.push(slot)
-    })
+    if (Array.isArray(slots)) {
+      slots.forEach(slot => {
+        const dateKey = slot.date
+        if (!slotMap.has(dateKey)) {
+          slotMap.set(dateKey, [])
+        }
+        slotMap.get(dateKey)?.push(slot)
+      })
+    }
     
     setMonthSlots(slotMap)
     
@@ -119,7 +121,7 @@ export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
     
     try {
       const dateStr = selectedDate.toISOString().split('T')[0]
-      addBooking({
+      await addBooking({
         date: dateStr,
         time: selectedTime,
         name: formData.name,
@@ -129,7 +131,7 @@ export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
       })
       
       // Reload slots to reflect the booking
-      loadMonthSlots()
+      await loadMonthSlots()
       setStep('success')
     } catch {
     } finally {

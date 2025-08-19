@@ -4,7 +4,7 @@ import * as React from "react"
 import { Mail, Phone, MapPin, Send, CheckCircle, Calendar } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
-import { addContactSubmission } from "@/lib/store"
+import { addContactSubmission } from "@/lib/store-migration"
 import { BookingModalV2 } from "./booking-modal-v2"
 
 export function ContactSection() {
@@ -24,14 +24,11 @@ export function ContactSection() {
     
     try {
       // Save to store
-      addContactSubmission({
+      await addContactSubmission({
         name: formData.name,
         email: formData.email,
         message: formData.message
       })
-      
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1000))
       
       setIsSuccess(true)
       setFormData({ name: "", email: "", message: "" })

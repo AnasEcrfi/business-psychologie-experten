@@ -20,7 +20,7 @@ import {
   updateBookingStatus,
   TimeSlot,
   Booking
-} from "@/lib/store"
+} from "@/lib/store-migration"
 import { cn } from "@/lib/utils"
 
 export default function AdminCalendar() {
@@ -35,15 +35,19 @@ export default function AdminCalendar() {
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null)
   const [mounted, setMounted] = React.useState(false)
 
-  const loadData = React.useCallback(() => {
+  const loadData = React.useCallback(async () => {
     const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
     const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)
     
-    const slots = getTimeSlots(startOfMonth, endOfMonth)
-    const allBookings = getBookings()
+    const slots = await getTimeSlots(startOfMonth, endOfMonth)
+    const allBookings = await getBookings()
     
-    setTimeSlots(slots)
-    setBookings(allBookings)
+    if (Array.isArray(slots)) {
+      setTimeSlots(slots)
+    }
+    if (Array.isArray(allBookings)) {
+      setBookings(allBookings)
+    }
   }, [currentDate])
 
   React.useEffect(() => {
@@ -97,7 +101,7 @@ export default function AdminCalendar() {
     setSelectedDate(date)
   }
 
-  const handleAddTimeSlots = (date: Date, times: string[]) => {
+  const handleAddTimeSlots = async (date: Date, times: string[]) => {
     const dateStr = date.toISOString().split('T')[0]
     const newSlots = times.map(time => ({
       date: dateStr,
@@ -105,20 +109,20 @@ export default function AdminCalendar() {
       available: true
     }))
     
-    addTimeSlots(newSlots)
-    loadData()
+    await addTimeSlots(newSlots)
+    await loadData()
   }
 
-  const handleRemoveSlot = (slotId: string) => {
+  const handleRemoveSlot = async (slotId: string) => {
     if (confirm('Are you sure you want to remove this time slot?')) {
-      removeTimeSlot(slotId)
-      loadData()
+      await removeTimeSlot(slotId)
+      await loadData()
     }
   }
 
-  const handleBookingStatusChange = (bookingId: string, status: Booking['status']) => {
-    updateBookingStatus(bookingId, status)
-    loadData()
+  const handleBookingStatusChange = async (bookingId: string, status: Booking['status']) => {
+    await updateBookingStatus(bookingId, status)
+    await loadData()
     setSelectedBooking(null)
   }
 

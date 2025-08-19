@@ -42,17 +42,8 @@ export const updateBookingStatus = USE_SUPABASE
   ? supabaseStore.updateBookingStatus
   : localStore.updateBookingStatus
 
-export const signIn = USE_SUPABASE
-  ? supabaseStore.signIn
-  : localStore.signIn
-
-export const signOut = USE_SUPABASE
-  ? supabaseStore.signOut
-  : localStore.signOut
-
-export const getCurrentUser = USE_SUPABASE
-  ? supabaseStore.getCurrentUser
-  : localStore.getCurrentUser
+// Auth functions are in separate auth modules
+export { signIn, signOut, getCurrentUser } from './auth-migration'
 
 // Export types from local store for compatibility
 export type { ContactSubmission, TimeSlot, Booking } from './store'
