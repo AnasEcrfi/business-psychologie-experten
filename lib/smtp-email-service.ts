@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 
 // Email configuration
-const ADMIN_EMAIL = 'apps@mpagency.ae'
+const ADMIN_EMAIL = 'info@vignoblenoirconsulting.de'
 
 // Create reusable transporter
 const createTransporter = () => {
