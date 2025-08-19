@@ -30,7 +30,7 @@ export default function AdminMessages() {
         setSelectedMessage(allMessages[0])
       }
     }
-  }, [])
+  }, [selectedMessage])
 
   React.useEffect(() => {
     loadMessages()

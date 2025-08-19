@@ -1,11 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
 import { Lock, ArrowRight } from "lucide-react"
 
 export default function ComingSoonPage() {
-  const router = useRouter()
   const [code, setCode] = React.useState("")
   const [error, setError] = React.useState(false)
   const [isUnlocking, setIsUnlocking] = React.useState(false)
