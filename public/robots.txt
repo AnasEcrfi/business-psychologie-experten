@@ -1,0 +1,9 @@
+# Robots.txt für Business Psychologie Experten
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://businesspsychologie-experten.de/sitemap.xml

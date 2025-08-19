@@ -2,14 +2,11 @@
 
 import * as React from "react"
 import { 
-  MessageSquare, 
   Mail, 
-  User,
   Calendar,
   CheckCircle,
   Circle,
   Reply,
-  Trash2,
   Search
 } from "lucide-react"
 import { getContactSubmissions, updateContactStatus, ContactSubmission } from "@/lib/store"
@@ -21,11 +18,7 @@ export default function AdminMessages() {
   const [searchTerm, setSearchTerm] = React.useState("")
   const [filter, setFilter] = React.useState<'all' | 'new' | 'read' | 'replied'>('all')
 
-  React.useEffect(() => {
-    loadMessages()
-  }, [])
-
-  const loadMessages = () => {
+  const loadMessages = React.useCallback(() => {
     const allMessages = getContactSubmissions()
     // Sort by date, newest first
     allMessages.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -35,7 +28,11 @@ export default function AdminMessages() {
     if (!selectedMessage && allMessages.length > 0) {
       setSelectedMessage(allMessages[0])
     }
-  }
+  }, [])
+
+  React.useEffect(() => {
+    loadMessages()
+  }, [loadMessages])
 
   const handleStatusChange = (id: string, status: ContactSubmission['status']) => {
     updateContactStatus(id, status)

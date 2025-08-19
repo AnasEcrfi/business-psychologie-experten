@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { ArrowDown } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
 import { IOSVideoBackground } from "./ios-video-background"
 import { BookingModalV2 } from "./booking-modal-v2"

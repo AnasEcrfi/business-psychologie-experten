@@ -71,7 +71,7 @@ export function TestimonialsSection() {
                 
                 {/* Content */}
                 <p className="text-base mb-6">
-                  "{testimonial.content}"
+                  &quot;{testimonial.content}&quot;
                 </p>
                 
                 {/* Rating */}

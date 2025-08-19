@@ -4,7 +4,6 @@ import * as React from "react"
 import { 
   X, 
   Calendar, 
-  Clock,
   ChevronLeft,
   ChevronRight,
   User,
@@ -23,7 +22,7 @@ interface BookingModalProps {
 }
 
 export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
-  const { t, language } = useLanguage()
+  const { language } = useLanguage()
   const [step, setStep] = React.useState<'calendar' | 'details' | 'success'>('calendar')
   const [currentMonth, setCurrentMonth] = React.useState(() => {
     const now = new Date()
@@ -42,12 +41,45 @@ export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
   })
   const [loading, setLoading] = React.useState(false)
 
+  const formatDateString = (date: Date) => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  const loadMonthSlots = React.useCallback(() => {
+    const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1)
+    const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
+    
+    const slots = getTimeSlots(startOfMonth, endOfMonth)
+    
+    // Group slots by date
+    const slotMap = new Map<string, TimeSlot[]>()
+    slots.forEach(slot => {
+      const dateKey = slot.date
+      if (!slotMap.has(dateKey)) {
+        slotMap.set(dateKey, [])
+      }
+      slotMap.get(dateKey)?.push(slot)
+    })
+    
+    setMonthSlots(slotMap)
+    
+    // Also update slots for selected date if any
+    if (selectedDate) {
+      const dateStr = formatDateString(selectedDate)
+      const dateSlots = slotMap.get(dateStr) || []
+      setAvailableSlots(dateSlots.filter(s => s.available))
+    }
+  }, [currentMonth, selectedDate])
+
   // Load available slots for the current month
   React.useEffect(() => {
     if (isOpen) {
       loadMonthSlots()
     }
-  }, [isOpen, currentMonth])
+  }, [isOpen, loadMonthSlots])
 
   // Reset state when modal opens/closes
   React.useEffect(() => {
@@ -59,23 +91,6 @@ export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
     }
   }, [isOpen])
 
-  const loadMonthSlots = () => {
-    const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1)
-    const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
-    
-    const slots = getTimeSlots(startOfMonth, endOfMonth)
-    
-    // Group slots by date
-    const slotMap = new Map<string, TimeSlot[]>()
-    slots.forEach(slot => {
-      if (slot.available) {
-        const existing = slotMap.get(slot.date) || []
-        slotMap.set(slot.date, [...existing, slot])
-      }
-    })
-    
-    setMonthSlots(slotMap)
-  }
 
   // Load slots for selected date
   React.useEffect(() => {
@@ -116,8 +131,7 @@ export function BookingModalV2({ isOpen, onClose }: BookingModalProps) {
       // Reload slots to reflect the booking
       loadMonthSlots()
       setStep('success')
-    } catch (error) {
-      console.error('Booking failed:', error)
+    } catch {
     } finally {
       setLoading(false)
     }

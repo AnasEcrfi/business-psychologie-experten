@@ -10,10 +10,7 @@ import {
   X,
   User,
   Mail,
-  Phone,
-  CheckCircle,
-  XCircle,
-  AlertCircle
+  Phone
 } from "lucide-react"
 import { 
   getTimeSlots, 
@@ -38,12 +35,7 @@ export default function AdminCalendar() {
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null)
   const [mounted, setMounted] = React.useState(false)
 
-  React.useEffect(() => {
-    setMounted(true)
-    loadData()
-  }, [currentDate])
-
-  const loadData = () => {
+  const loadData = React.useCallback(() => {
     const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
     const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)
     
@@ -52,7 +44,13 @@ export default function AdminCalendar() {
     
     setTimeSlots(slots)
     setBookings(allBookings)
-  }
+  }, [currentDate])
+
+  React.useEffect(() => {
+    setMounted(true)
+    loadData()
+  }, [currentDate, loadData])
+
 
   const getDaysInMonth = () => {
     const year = currentDate.getFullYear()

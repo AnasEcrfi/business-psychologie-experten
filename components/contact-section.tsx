@@ -40,8 +40,7 @@ export function ContactSection() {
       setTimeout(() => {
         setIsSuccess(false)
       }, 3000)
-    } catch (error) {
-      console.error('Failed to submit form:', error)
+    } catch {
     } finally {
       setIsSubmitting(false)
     }

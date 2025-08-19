@@ -4,7 +4,6 @@ import * as React from "react"
 import { 
   X, 
   Calendar, 
-  Clock,
   ChevronLeft,
   ChevronRight,
   User,
@@ -23,7 +22,7 @@ interface BookingModalProps {
 }
 
 export function BookingModalSimple({ isOpen, onClose }: BookingModalProps) {
-  const { t, language } = useLanguage()
+  const { language } = useLanguage()
   const [step, setStep] = React.useState<'calendar' | 'details' | 'success'>('calendar')
   const [currentMonth, setCurrentMonth] = React.useState(() => {
     const now = new Date()
@@ -41,30 +40,7 @@ export function BookingModalSimple({ isOpen, onClose }: BookingModalProps) {
   })
   const [loading, setLoading] = React.useState(false)
 
-  React.useEffect(() => {
-    if (isOpen) {
-      loadMonthSlots()
-      // Prevent body scroll when modal is open
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isOpen, currentMonth])
-
-  React.useEffect(() => {
-    if (isOpen) {
-      setStep('calendar')
-      setSelectedDate(null)
-      setSelectedTime(null)
-      setFormData({ name: '', email: '', phone: '', message: '' })
-    }
-  }, [isOpen])
-
-  const loadMonthSlots = () => {
+  const loadMonthSlots = React.useCallback(() => {
     const startOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1)
     const endOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
     
@@ -79,7 +55,31 @@ export function BookingModalSimple({ isOpen, onClose }: BookingModalProps) {
     })
     
     setMonthSlots(slotMap)
-  }
+  }, [currentMonth])
+
+  React.useEffect(() => {
+    if (isOpen) {
+      loadMonthSlots()
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen, currentMonth, loadMonthSlots])
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setStep('calendar')
+      setSelectedDate(null)
+      setSelectedTime(null)
+      setFormData({ name: '', email: '', phone: '', message: '' })
+    }
+  }, [isOpen])
+
 
   React.useEffect(() => {
     if (selectedDate) {
@@ -118,8 +118,7 @@ export function BookingModalSimple({ isOpen, onClose }: BookingModalProps) {
       
       loadMonthSlots()
       setStep('success')
-    } catch (error) {
-      console.error('Booking failed:', error)
+    } catch {
     } finally {
       setLoading(false)
     }

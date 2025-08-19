@@ -13,7 +13,7 @@ import { StickyCTA } from "@/components/sticky-cta"
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main id="main" className="min-h-screen">
       <Navigation />
       <HeroSection />
       <ChallengesSection />
