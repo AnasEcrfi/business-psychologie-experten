@@ -1,6 +1,6 @@
 // Wrapper functions that add email notifications to store operations
 import * as storeMigration from './store-migration'
-import { sendBookingNotification, sendContactFormNotification } from './email-service'
+import { sendBookingNotification, sendContactFormNotification } from './smtp-email-service'
 
 // Re-export all functions that don't need notifications
 export {

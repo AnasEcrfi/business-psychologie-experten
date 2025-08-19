@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { sendBookingNotification, sendContactFormNotification } from '@/lib/email-service'
+import { sendBookingNotification, sendContactFormNotification } from '@/lib/smtp-email-service'
 
 export async function POST(request: Request) {
   try {
