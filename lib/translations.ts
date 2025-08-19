@@ -56,7 +56,7 @@ export const translations = {
         crisis: {
           title: "Krisenmanagement",
           description: "Resilienz und Stärke in herausfordernden Zeiten",
-          features: ["Resilienz", "Stressbewältigung", "Recovery"],
+          features: ["Resilienz", "Stressbewältigung", "Deeskalationstraining"],
         },
       },
     },
@@ -338,7 +338,7 @@ export const translations = {
         crisis: {
           title: "Crisis Management",
           description: "Resilience and strength in challenging times",
-          features: ["Resilience", "Stress Management", "Recovery"],
+          features: ["Resilience", "Stress Management", "De-escalation Training"],
         },
       },
     },

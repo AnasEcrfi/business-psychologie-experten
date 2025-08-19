@@ -10,8 +10,10 @@ import {
   X,
   User,
   Mail,
-  Phone
+  Phone,
+  Settings
 } from "lucide-react"
+import { FixedTimeSlots } from "@/components/fixed-time-slots"
 import { 
   getTimeSlots, 
   addTimeSlots, 
@@ -33,6 +35,7 @@ export default function AdminCalendar() {
   const [bookings, setBookings] = React.useState<Booking[]>([])
   const [showAddModal, setShowAddModal] = React.useState(false)
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null)
+  const [showSettings, setShowSettings] = React.useState(false)
   const [mounted, setMounted] = React.useState(false)
 
   const loadData = React.useCallback(async () => {
@@ -148,11 +151,20 @@ export default function AdminCalendar() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-semibold mb-2">Calendar Management</h1>
-        <p className="text-muted-foreground">
-          Manage available time slots and bookings
-        </p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-semibold mb-2">Calendar Management</h1>
+          <p className="text-muted-foreground">
+            Manage available time slots and bookings
+          </p>
+        </div>
+        <button
+          onClick={() => setShowSettings(true)}
+          className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors flex items-center gap-2"
+        >
+          <Settings className="w-4 h-4" />
+          <span>Zeitfenster verwalten</span>
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -547,6 +559,30 @@ function BookingDetailModal({
           </button>
         </div>
       </div>
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold">Zeitfenster Einstellungen</h2>
+              <button
+                onClick={() => setShowSettings(false)}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <FixedTimeSlots 
+              onSlotsChange={(slots) => {
+                // Here you can save the slots configuration
+                console.log('Fixed time slots updated:', slots)
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

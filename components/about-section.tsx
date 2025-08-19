@@ -15,7 +15,7 @@ export function AboutSection() {
     { value: "500", suffix: "+", label: t.about.stats.projects, icon: Target },
     { value: "98", suffix: "%", label: t.about.stats.satisfaction, icon: Award },
     { value: "15", suffix: "+", label: t.about.stats.experience, icon: Zap },
-    { value: "50", suffix: "+", label: t.about.stats.experts, icon: Users },
+    { value: "30", suffix: "+", label: t.about.stats.experts, icon: Users },
   ]
 
   React.useEffect(() => {
@@ -24,7 +24,7 @@ export function AboutSection() {
         if (entry.isIntersecting) {
           setIsVisible(true)
           // Start counter animation
-          const targets = [500, 98, 15, 50]
+          const targets = [500, 98, 15, 30]
           targets.forEach((target, index) => {
             let current = 0
             const increment = target / 50
