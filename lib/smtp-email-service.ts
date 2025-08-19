@@ -36,13 +36,16 @@ export async function sendBookingNotification(data: BookingNotificationData) {
   try {
     const transporter = createTransporter()
     
-    // Format date for display
-    const dateObj = new Date(data.date)
+    // Format date for display - parse as local date to avoid timezone issues
+    // data.date comes as YYYY-MM-DD string
+    const [year, month, day] = data.date.split('-').map(Number)
+    const dateObj = new Date(year, month - 1, day) // month is 0-indexed in JS
     const formattedDate = dateObj.toLocaleDateString('de-DE', { 
       weekday: 'long', 
       day: 'numeric', 
       month: 'long', 
-      year: 'numeric' 
+      year: 'numeric',
+      timeZone: 'Europe/Berlin' // Ensure German timezone
     })
     
     const mailOptions = {
