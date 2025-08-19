@@ -23,7 +23,7 @@ export default function AdminLayout({
   const router = useRouter()
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = React.useState(false)
-  const [user, setUser] = React.useState<any>(null)
+  const [user, setUser] = React.useState<{ name?: string; email?: string } | null>(null)
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {

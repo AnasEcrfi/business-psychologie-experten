@@ -35,7 +35,7 @@ export default function DatenschutzPage() {
             <h2>3. Datenerfassung auf dieser Website</h2>
             <h3>Cookies</h3>
             <p>
-              Unsere Internetseiten verwenden so genannte „Cookies". Cookies sind kleine 
+              Unsere Internetseiten verwenden so genannte &ldquo;Cookies&rdquo;. Cookies sind kleine 
               Textdateien und richten auf Ihrem Endgerät keinen Schaden an.
             </p>
 
