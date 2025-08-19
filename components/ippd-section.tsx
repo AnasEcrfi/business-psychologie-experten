@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import { Brain, Sparkles, Layers, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
@@ -52,6 +53,16 @@ export function IppdSection() {
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16">
+            {/* IPPD Logo */}
+            <div className="mb-8 flex justify-center">
+              <Image
+                src="/assets/images/IPPD_Logo.png"
+                alt="IPPD - Institut für Persönlichkeit und Performance Development"
+                width={200}
+                height={80}
+                className="object-contain"
+              />
+            </div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-zinc-800/50 mb-6">
               <Sparkles className="w-4 h-4" />
               <span className="text-sm font-medium">{t.ippd.badge}</span>
