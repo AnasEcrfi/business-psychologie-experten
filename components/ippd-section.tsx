@@ -53,14 +53,23 @@ export function IppdSection() {
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16">
-            {/* IPPD Logo */}
+            {/* IPPD Logo - different for light/dark mode */}
             <div className="mb-8 flex justify-center">
+              {/* Light mode logo */}
+              <Image
+                src="/assets/images/IPPD_Logo_2.png"
+                alt="IPPD - Institut für Persönlichkeit und Performance Development"
+                width={200}
+                height={80}
+                className="object-contain dark:hidden"
+              />
+              {/* Dark mode logo */}
               <Image
                 src="/assets/images/IPPD_Logo.png"
                 alt="IPPD - Institut für Persönlichkeit und Performance Development"
                 width={200}
                 height={80}
-                className="object-contain"
+                className="object-contain hidden dark:block"
               />
             </div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 dark:bg-zinc-800/50 mb-6">
