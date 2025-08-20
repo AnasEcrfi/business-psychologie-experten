@@ -177,21 +177,15 @@ export function BookingModalSimple({ isOpen, onClose }: BookingModalProps) {
     <>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
         onClick={onClose}
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
       />
       
       {/* Modal */}
-      <div 
-        className="fixed inset-0 z-[9999] pointer-events-none"
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-      >
-        <div className="h-full flex items-center justify-center p-4">
-          <div 
-            className="bg-white dark:bg-zinc-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl pointer-events-auto"
-            style={{ backgroundColor: 'white' }}
-          >
+      <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 pointer-events-none">
+        <div 
+          className="bg-white dark:bg-zinc-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl pointer-events-auto"
+        >
             {/* Header */}
             <div className="p-6 border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between">
               <div>
@@ -465,7 +459,6 @@ export function BookingModalSimple({ isOpen, onClose }: BookingModalProps) {
               )}
             </div>
           </div>
-        </div>
       </div>
     </>
   )

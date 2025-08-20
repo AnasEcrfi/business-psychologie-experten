@@ -23,6 +23,11 @@ import {
   TimeSlot,
   Booking
 } from "@/lib/store-migration"
+import { 
+  getFixedTimeSlots, 
+  saveFixedTimeSlots, 
+  applyFixedTimeSlotsToCalendar 
+} from "@/lib/fixed-time-slots-store"
 import { cn } from "@/lib/utils"
 
 export default function AdminCalendar() {
@@ -37,8 +42,8 @@ export default function AdminCalendar() {
   const [selectedBooking, setSelectedBooking] = React.useState<Booking | null>(null)
   const [showSettings, setShowSettings] = React.useState<boolean>(false)
   const [fixedSlots, setFixedSlots] = React.useState<FixedTimeSlot[]>([
-    { dayOfWeek: 1, startTime: "13:00", endTime: "15:00", enabled: true },
-    { dayOfWeek: 2, startTime: "11:00", endTime: "13:00", enabled: true },
+    { dayOfWeek: 1, startTime: "13:00", endTime: "15:00", enabled: true, durationType: 'forever' },
+    { dayOfWeek: 2, startTime: "11:00", endTime: "13:00", enabled: true, durationType: 'forever' },
   ])
   const [mounted, setMounted] = React.useState(false)
 
@@ -60,7 +65,45 @@ export default function AdminCalendar() {
   React.useEffect(() => {
     setMounted(true)
     loadData()
+    // Load fixed time slots from database
+    loadFixedSlots()
   }, [currentDate, loadData])
+  
+  const loadFixedSlots = async () => {
+    const slots = await getFixedTimeSlots()
+    if (slots.length > 0) {
+      setFixedSlots(slots.map(slot => ({
+        dayOfWeek: slot.day_of_week,
+        startTime: slot.start_time,
+        endTime: slot.end_time,
+        enabled: slot.enabled,
+        durationType: slot.duration_type,
+        durationValue: slot.duration_value,
+        validUntil: slot.valid_until
+      })))
+    }
+  }
+  
+  const handleFixedSlotsChange = async (slots: FixedTimeSlot[]) => {
+    setFixedSlots(slots)
+    // Save to database
+    await saveFixedTimeSlots(slots.map(slot => ({
+      day_of_week: slot.dayOfWeek,
+      start_time: slot.startTime,
+      end_time: slot.endTime,
+      enabled: slot.enabled,
+      duration_type: slot.durationType,
+      duration_value: slot.durationValue,
+      valid_until: slot.validUntil
+    })))
+  }
+  
+  const applyFixedSlotsToMonth = async () => {
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1)
+    const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0)
+    await applyFixedTimeSlotsToCalendar(startOfMonth, endOfMonth)
+    await loadData()
+  }
 
 
   const getDaysInMonth = () => {
@@ -427,11 +470,28 @@ export default function AdminCalendar() {
             
             <FixedTimeSlots 
               initialSlots={fixedSlots}
-              onSlotsChange={(slots) => {
-                setFixedSlots(slots)
-                console.log('Fixed time slots updated:', slots)
-              }}
+              onSlotsChange={handleFixedSlotsChange}
             />
+            
+            <div className="mt-6 flex gap-3">
+              <button
+                onClick={applyFixedSlotsToMonth}
+                className="flex-1 py-2 rounded-xl bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+              >
+                Auf aktuellen Monat anwenden
+              </button>
+              <button
+                onClick={async () => {
+                  const nextThreeMonths = new Date(currentDate)
+                  nextThreeMonths.setMonth(nextThreeMonths.getMonth() + 3)
+                  await applyFixedTimeSlotsToCalendar(currentDate, nextThreeMonths)
+                  await loadData()
+                }}
+                className="flex-1 py-2 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+              >
+                Auf nächste 3 Monate anwenden
+              </button>
+            </div>
           </div>
         </div>
       )}

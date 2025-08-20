@@ -4,7 +4,8 @@ import * as React from "react"
 import { Calendar } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/contexts/language-context"
-import { BookingModalSimple } from "./booking-modal-simple"
+import { BookingModalV2 } from "./booking-modal-v2"
+import { ModalPortal } from "./modal-portal"
 
 export function StickyCTA() {
   const { t } = useLanguage()
@@ -29,7 +30,7 @@ export function StickyCTA() {
   return (
     <div
       className={cn(
-        "fixed bottom-6 right-6 z-40 transition-all duration-700 ease-out",
+        "fixed bottom-6 right-6 z-50 transition-all duration-700 ease-out",
         isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0 pointer-events-none"
       )}
     >
@@ -48,10 +49,12 @@ export function StickyCTA() {
       </button>
       
       {/* Booking Modal */}
-      <BookingModalSimple 
-        isOpen={showBookingModal}
-        onClose={() => setShowBookingModal(false)}
-      />
+      <ModalPortal>
+        <BookingModalV2 
+          isOpen={showBookingModal}
+          onClose={() => setShowBookingModal(false)}
+        />
+      </ModalPortal>
     </div>
   )
 }
