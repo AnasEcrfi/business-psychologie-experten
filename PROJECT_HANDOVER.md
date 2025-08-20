@@ -75,7 +75,7 @@ Alle sensiblen Daten sind sicher in Vercel gespeichert:
 ## 📝 Wartung & Support
 
 ### Kostenfreie Nachbesserungen
-- **Zeitraum:** 21. August 2024 - 20. September 2024 (30 Tage)
+- **Zeitraum:** 21. August 2025 - 20. September 2025 (30 Tage)
 - Fehlerbehebungen
 - Kleine Anpassungen im vereinbarten Rahmen
 
@@ -93,10 +93,6 @@ Die Plattform ist für zukünftige Erweiterungen vorbereitet:
 - Video-Beratungen
 - Blog/Wissensdatenbank
 
-## 📞 Support-Kontakt
-
-Bei Fragen oder Problemen wenden Sie sich bitte an Ihren Entwickler.
-
 ---
 
-*Stand: August 2024*
+*Stand: August 2025*
