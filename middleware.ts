@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   // Check if coming soon mode is enabled
-  const COMING_SOON_MODE = true // Set to false to disable coming soon
+  const COMING_SOON_MODE = false // DISABLED - Site is now live!
   
   // Allow access to coming-soon page itself and legal pages
   if (
@@ -34,7 +34,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
   
-  // Check for admin access
+  // Check for admin access (keeping for potential future use)
   const hasAccess = request.cookies.get('bpe_access')?.value === 'granted'
   
   // If coming soon mode is enabled and no access, redirect to coming soon

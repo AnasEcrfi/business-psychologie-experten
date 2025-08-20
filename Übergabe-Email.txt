@@ -9,6 +9,8 @@ es ist soweit - deine neue Website ist fertig und live! 🎉
 🌐 **Hauptseite:** https://businesspsychologieexperten.de
 🔐 **Admin-Bereich:** https://businesspsychologieexperten.de/admin/login
 
+Die Coming-Soon Sperre mit dem Code "BPE 2025" wurde entfernt - deine Website ist jetzt für alle Besucher frei zugänglich!
+
 ## Was alles umgesetzt wurde:
 
 Deine moderne Business-Website hat jetzt:
