@@ -6,7 +6,7 @@ Eine moderne, mehrsprachige Website für Business-Psychologie-Beratung mit integ
 ## 🔐 Zugangsdaten
 
 ### Admin-Panel
-- **URL:** https://ihre-domain.de/admin/login
+- **URL:** https://businesspsychologieexperten.de/admin/login
 - **Email:** support@businesspsychologieexperten.de
 - **Passwort:** Tolea0117!!
 
@@ -22,6 +22,12 @@ Eine moderne, mehrsprachige Website für Business-Psychologie-Beratung mit integ
 - E-Mails werden direkt über Ihren SMTP-Server versendet
 - Absender: Ihre geschäftliche E-Mail-Adresse
 - Empfänger für Benachrichtigungen: support@businesspsychologieexperten.de
+
+## 🌐 Live-Links
+
+- **Hauptseite:** https://businesspsychologieexperten.de
+- **Admin-Login:** https://businesspsychologieexperten.de/admin/login
+- **GitHub Repository:** https://github.com/AnasEcrfi/business-psychologie-experten
 
 ## ⚙️ Hauptfunktionen
 
