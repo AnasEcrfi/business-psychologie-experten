@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   // Check if coming soon mode is enabled
-  const COMING_SOON_MODE = false // DISABLED - Site is now live!
+  const COMING_SOON_MODE = false // DISABLED - Site is now live! Production ready.
   
   // Allow access to coming-soon page itself and legal pages
   if (
