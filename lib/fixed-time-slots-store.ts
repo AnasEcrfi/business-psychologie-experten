@@ -53,7 +53,7 @@ export async function getFixedTimeSlots() {
     }
 
     return data || []
-  } catch (error) {
+  } catch {
     // Return default slots if there's any error
     return [
       {
@@ -117,7 +117,7 @@ export async function saveFixedTimeSlots(slots: FixedTimeSlotDB[]) {
     }
 
     return []
-  } catch (error) {
+  } catch {
     console.log('Using in-memory fixed time slots')
     return slots
   }
@@ -175,7 +175,7 @@ export async function generateTimeSlotsFromFixed(startDate: Date, endDate: Date)
       const [startHour, startMinute] = slot.start_time.split(':').map(Number)
       const [endHour, endMinute] = slot.end_time.split(':').map(Number)
       
-      let currentTime = new Date(currentDate)
+      const currentTime = new Date(currentDate)
       currentTime.setHours(startHour, startMinute, 0, 0)
       
       const endTime = new Date(currentDate)

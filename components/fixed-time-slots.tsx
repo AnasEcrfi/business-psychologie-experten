@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Clock, Plus, X, Calendar, CalendarDays, Infinity } from "lucide-react"
+import { Clock, Plus, X, Infinity } from "lucide-react"
 
 export interface FixedTimeSlot {
   dayOfWeek: number // 0-6 (Sunday-Saturday)
