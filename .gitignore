@@ -39,3 +39,15 @@ next-env.d.ts
 assets/videos/Stock/*.mp4
 assets/videos/*.m4v
 assets/videos/*.mp4
+
+# Setup and test scripts
+setup-*.js
+test-*.js
+cleanup-*.js
+create-*.js
+deploy-*.sh
+
+# Temporary documentation
+*-Email.txt
+COMING_SOON_INFO.md
+SUPABASE_SETUP.md
