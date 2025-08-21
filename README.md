@@ -39,9 +39,9 @@ npm start
 
 Der Admin-Bereich ist unter `/admin` erreichbar.
 
-**Demo-Zugangsdaten:**
-- Email: admin@businesspsychologie.de
-- Passwort: admin123
+**Zugangsdaten:**
+- Email: support@businesspsychologieexperten.de
+- Passwort: Siehe PROJECT_HANDOVER.md
 
 ### Admin-Funktionen:
 - Dashboard mit Übersicht
